@@ -35,6 +35,23 @@ async def check_charity_project_exists(
     return charity_project
 
 
+async def check_no_invested_funds(
+        charity_project: CharityProject,
+) -> CharityProject:
+    if charity_project.invested_amount > 0:
+        raise HTTPException(status_code=422,
+                            detail='В проекте есть инвестированные средства.')
+    return charity_project
+
+async def check_greater_than_invested_funds(
+        new_value: int,
+        charity_project: CharityProject,
+) -> CharityProject:
+    if charity_project.full_amount > new_value:
+        raise HTTPException(status_code=422,
+                            detail='Новая сумма инвестирования меньше установленной')
+    return charity_project
+
 # async def check_reservation_intersections(**kwargs) -> None:
 #     reservations = await reservation_crud.get_reservations_at_the_same_time(
 #         **kwargs

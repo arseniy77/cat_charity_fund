@@ -10,8 +10,11 @@ from app.schemas.charityproject import (
     CharityProjectCreate, CharityProjectUpdate, CharityProjectDB
 )
 
-from app.api.validators import check_charity_project_exists, check_name_duplicate
-from app.schemas.charityproject import CharityProjectDB
+from app.api.validators import (
+    check_charity_project_exists, check_name_duplicate,
+    check_no_invested_funds, check_greater_than_invested_funds,
+)
+from app.schemas.charityproject import CharityProjectDB, CharityProjectResponse
 # from app.crud.reservation import reservation_crud
 from app.core.user import current_superuser
 
@@ -20,7 +23,7 @@ router = APIRouter()
 
 @router.post(
     '/charityproject',
-    response_model=CharityProjectDB,
+    response_model=CharityProjectResponse,
     response_model_exclude_none=True,
     dependencies=[Depends(current_superuser)],
 )
@@ -38,7 +41,7 @@ async def create_new_meeting_room(
 
 @router.get(
     '/charityproject',
-    response_model=list[CharityProjectDB],
+    response_model=list[CharityProjectResponse],
     response_model_exclude_none=True,
 )
 async def get_all_charity_projects(
@@ -51,7 +54,7 @@ async def get_all_charity_projects(
 
 @router.patch(
     '/charityproject/{charity_project_id}',
-    response_model=CharityProjectDB,
+    response_model=CharityProjectResponse,
     response_model_exclude_none=True,
     dependencies=[Depends(current_superuser)],
 )
@@ -68,6 +71,9 @@ async def partially_update_charity_project(
 
     if obj_in.name is not None:
         await check_name_duplicate(obj_in.name, session)
+    if obj_in.full_amount is not None:
+        await check_greater_than_invested_funds(obj_in.full_amount,
+                                                charity_project)
 
     # Замените вызов функции на вызов метода.
     charity_project = await charity_project_crud.update(
@@ -78,11 +84,11 @@ async def partially_update_charity_project(
 
 @router.delete(
     '/{meeting_room_id}',
-    response_model=CharityProjectDB,
+    response_model=CharityProjectResponse,
     response_model_exclude_none=True,
     dependencies=[Depends(current_superuser)],
 )
-async def remove_meeting_room(
+async def remove_charity_project(
         charity_project_id: int,
         session: AsyncSession = Depends(get_async_session),
 ):
@@ -90,6 +96,9 @@ async def remove_meeting_room(
 
     charity_project = await check_charity_project_exists(charity_project_id,
                                                    session)
+    print(charity_project)
+    print(charity_project.invested_amount)
+    charity_project = await check_no_invested_funds(charity_project)
     # Замените вызов функции на вызов метода.
     charity_project = await charity_project_crud.remove(charity_project,
                                                   session)
