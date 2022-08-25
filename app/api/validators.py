@@ -17,7 +17,7 @@ async def check_name_duplicate(
     if charity_project_id is not None:
         raise HTTPException(
             status_code=422,
-            detail='Переговорка с таким именем уже существует!',
+            detail='Проект с таким именем уже существует!',
         )
 
 
@@ -30,7 +30,7 @@ async def check_charity_project_exists(
     if charity_project is None:
         raise HTTPException(
             status_code=404,
-            detail='Переговорка не найдена!'
+            detail='Проект не найден!'
         )
     return charity_project
 

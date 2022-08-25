@@ -5,7 +5,7 @@ from pydantic import BaseSettings, EmailStr
 
 
 class Settings(BaseSettings):
-    app_title: str = 'Бронирование переговорок'
+    app_title: str = 'Кошачьи инвестиции'
     database_url: str
     secret: str = 'secret'
     first_superuser_email: Optional[EmailStr] = None

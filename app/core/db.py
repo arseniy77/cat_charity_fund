@@ -11,6 +11,7 @@ from app.core.config import settings
 
 
 
+
 class PreBase:
 
     @declared_attr

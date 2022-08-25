@@ -18,7 +18,7 @@ class CharityProjectBase(BaseModel):
 class CharityProjectCreate(CharityProjectBase):
     name: str = Field(..., min_length=1, max_length=100)
     description: str = Field(...)
-    full_amount: int = Field(ge=0)
+    full_amount: int = Field(gt=0)
 
 
 # Новый класс для обновления объектов.
@@ -29,7 +29,7 @@ class CharityProjectUpdate(CharityProjectBase):
     def name_cannot_be_null(cls, value):
         if value is None:
             raise ValueError(
-                'Имя переговорки не может быть пустым!')
+                'Имя проекта не может быть пустым!')
         return value
 
 

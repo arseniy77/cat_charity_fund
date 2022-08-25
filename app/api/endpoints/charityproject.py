@@ -22,12 +22,12 @@ router = APIRouter()
 
 
 @router.post(
-    '/charityproject',
+    '/',
     response_model=CharityProjectResponse,
     response_model_exclude_none=True,
     dependencies=[Depends(current_superuser)],
 )
-async def create_new_meeting_room(
+async def create_new_charity_project(
         charity_project: CharityProjectCreate,
         session: AsyncSession = Depends(get_async_session),
 ):
@@ -35,12 +35,14 @@ async def create_new_meeting_room(
 
     # await check_name_duplicate(meeting_room.name, session)
     # Замените вызов функции на вызов метода.
+
+    await check_name_duplicate(charity_project.name, session)
     new_charity_project = await charity_project_crud.create(charity_project, session)
     return new_charity_project
 
 
 @router.get(
-    '/charityproject',
+    '/',
     response_model=list[CharityProjectResponse],
     response_model_exclude_none=True,
 )
@@ -53,7 +55,7 @@ async def get_all_charity_projects(
 
 
 @router.patch(
-    '/charityproject/{charity_project_id}',
+    '/{charity_project_id}',
     response_model=CharityProjectResponse,
     response_model_exclude_none=True,
     dependencies=[Depends(current_superuser)],
@@ -83,7 +85,7 @@ async def partially_update_charity_project(
 
 
 @router.delete(
-    '/{meeting_room_id}',
+    '/{charity_project_id}',
     response_model=CharityProjectResponse,
     response_model_exclude_none=True,
     dependencies=[Depends(current_superuser)],
@@ -96,8 +98,6 @@ async def remove_charity_project(
 
     charity_project = await check_charity_project_exists(charity_project_id,
                                                    session)
-    print(charity_project)
-    print(charity_project.invested_amount)
     charity_project = await check_no_invested_funds(charity_project)
     # Замените вызов функции на вызов метода.
     charity_project = await charity_project_crud.remove(charity_project,
