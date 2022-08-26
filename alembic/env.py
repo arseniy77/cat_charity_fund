@@ -1,56 +1,25 @@
 import asyncio
-from logging.config import fileConfig
 
-from sqlalchemy import engine_from_config
-from sqlalchemy import pool
-from sqlalchemy.ext.asyncio import AsyncEngine
-
-from alembic import context
-
-import asyncio
-# Импортируем модуль стандартной библиотеки для работы с ОС.
 import os
 from logging.config import fileConfig
 
-# Импортируем функцию для чтения файлов с переменными окружения
-# из библиотеки python-dotenv. Эта библиотека была установлена
-# вместе с uvicorn.
+
 from dotenv import load_dotenv
 from sqlalchemy import engine_from_config
 from sqlalchemy import pool
 from sqlalchemy.ext.asyncio import AsyncEngine
-
 from alembic import context
 
 from app.core.base import Base
 
 
-
-
-# Загрузим файл .env в переменные окружения.
-# Библиотека python-dotenv умеет находить файл в «вышестоящих» каталогах,
-# поэтому полный путь указывать не обязательно.
 load_dotenv('.env')
-
-# this is the Alembic Config object, which provides
-# access to the values within the .ini file in use.
 config = context.config
-
-# Установим для переменной sqlalchemy.url значение из нашего .env файла.
 config.set_main_option('sqlalchemy.url', os.environ['DATABASE_URL'])
-
 target_metadata = Base.metadata
 
-
-# Interpret the config file for Python logging.
-# This line sets up loggers basically.
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
-
-# add your model's MetaData object here
-# for 'autogenerate' support
-# from myapp import mymodel
-# target_metadata = mymodel.Base.metadata
 
 
 def run_migrations_offline():
@@ -80,7 +49,6 @@ def run_migrations_offline():
 def do_run_migrations(connection):
     context.configure(connection=connection,
                       target_metadata=target_metadata,
-                      # Допишите ещё один параметр.
                       render_as_batch=True,
                       )
 

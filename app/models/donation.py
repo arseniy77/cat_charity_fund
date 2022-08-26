@@ -1,13 +1,9 @@
-# app/models/meeting_room.py
+from sqlalchemy import Column, ForeignKey, Integer, Text
 
-# Импортируем из Алхимии нужные классы.
-from sqlalchemy import Column, ForeignKey, String, Text, Integer
-from sqlalchemy.orm import relationship
-
-# Импортируем базовый класс для моделей.
-from app.core.db import Base, DonationMixin
+from app.core.db import Base
+from app.models.basemodel import StartModel
 
 
-class Donation(Base, DonationMixin):
+class Donation(Base, StartModel):
     user_id = Column(Integer, ForeignKey('user.id'))
     comment = Column(Text)

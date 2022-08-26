@@ -443,6 +443,9 @@ def test_update_charity_project_full_amount_smaller_already_invested(superuser_c
             'invested_amount': full_amount,
         },
     )
+    print(f'full amount {full_amount}')
+    print(response.json())
+
     assert response.status_code == 422, (
         'При редактировании проекта должно быть запрещено устанавливать требуемую сумму меньше внесённой.'
     )
@@ -573,6 +576,7 @@ def test_donation_exist_project_create(superuser_client, donation):
 
 def test_delete_charity_project_already_invested(superuser_client, charity_project_little_invested):
     response = superuser_client.delete('/charity_project/1')
+    print(response.status_code)
     assert response.status_code == 400, (
         'Удаление проектов, в которые уже внесены средства, должно быть запрещено. '
         'Статус-код ответа отличается от ожидаемого.'
