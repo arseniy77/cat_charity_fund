@@ -1,14 +1,11 @@
 from typing import Optional, Union
 
 from fastapi import Depends, Request
-from fastapi_users import (  # noqa
-    BaseUserManager, FastAPIUsers,  # noqa
-    IntegerIDMixin, InvalidPasswordException  # noqa
-)  # noqa
-from fastapi_users.authentication import (  # noqa
-    AuthenticationBackend,   # noqa
-    BearerTransport, JWTStrategy)  # noqa
-from fastapi_users_db_sqlalchemy import SQLAlchemyUserDatabase  # noqa
+from fastapi_users import (BaseUserManager, FastAPIUsers, IntegerIDMixin,
+                           InvalidPasswordException)
+from fastapi_users.authentication import (AuthenticationBackend,
+                                          BearerTransport, JWTStrategy)
+from fastapi_users_db_sqlalchemy import SQLAlchemyUserDatabase
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.config import settings
@@ -27,7 +24,8 @@ bearer_transport = BearerTransport(tokenUrl='auth/jwt/login')
 
 def get_jwt_strategy() -> JWTStrategy:
     return JWTStrategy(
-        secret=settings.secret, lifetime_seconds=3600
+        secret=settings.secret,
+        lifetime_seconds=settings.token_lifetime,
     )
 
 

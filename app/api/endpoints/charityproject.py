@@ -1,23 +1,20 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.api.validators import (  # noqa
-    check_charity_project_before_delete,  # noqa
-    check_charity_project_exists,  # noqa
-    check_name_duplicate, check_project_update_is_possible  # noqa
-)  # noqa
-from app.core.db import get_async_session  # noqa
+from app.api.validators import (check_charity_project_before_delete,
+                                check_charity_project_exists,
+                                check_name_duplicate,
+                                check_project_update_is_possible)
+from app.core.db import get_async_session
 from app.core.user import current_superuser
 from app.crud.charityproject import charity_project_crud
 from app.models import CharityProject
-from app.schemas.charityproject import (  # noqa
-    CharityProjectCreate, CharityProjectResponse,  # noqa
-    CharityProjectUpdate  # noqa
-)  # noqa
-from app.services.project_investment import (  # noqa
-    invest_when_new_project, patch_project_with_full_investment  # noqa
-)  # noqa
-  # noqa
+from app.schemas.charityproject import (CharityProjectCreate,
+                                        CharityProjectResponse,
+                                        CharityProjectUpdate)
+from app.services.project_investment import (
+    invest_when_new_project, patch_project_with_full_investment)
+
 router = APIRouter()
 
 
@@ -50,8 +47,7 @@ async def create_new_charity_project(
 async def get_all_charity_projects(
         session: AsyncSession = Depends(get_async_session),
 ):
-    all_projects = await charity_project_crud.get_multi(session)
-    return all_projects  # noqa
+    return await charity_project_crud.get_multi(session)
 
 
 @router.patch(

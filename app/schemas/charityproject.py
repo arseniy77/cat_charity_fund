@@ -1,9 +1,8 @@
 from datetime import datetime
 from typing import Optional
 
-from pydantic import (BaseModel, Extra, Field,  # noqa
-                      NonNegativeInt, PositiveInt, validator)  # noqa
-  # noqa
+from pydantic import (BaseModel, Extra, Field, NonNegativeInt, PositiveInt,
+                      validator)
 
 
 class CharityProjectBase(BaseModel):
