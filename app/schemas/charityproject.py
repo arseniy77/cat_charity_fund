@@ -10,13 +10,19 @@ class CharityProjectBase(BaseModel):
     description: Optional[str]
 
 
+class CharityProjectBaseUpdate(CharityProjectBase):
+
+    class Config:
+        extra = Extra.forbid
+
+
 class CharityProjectCreate(CharityProjectBase):
     name: str = Field(..., min_length=1, max_length=100)
     description: str = Field(..., min_length=1)
     full_amount: PositiveInt
 
 
-class CharityProjectUpdate(CharityProjectBase):
+class CharityProjectUpdate(CharityProjectBaseUpdate):
     full_amount: Optional[PositiveInt]
 
     @validator('name')
@@ -26,8 +32,7 @@ class CharityProjectUpdate(CharityProjectBase):
                 'Имя проекта не может быть пустым!')
         return value
 
-    class Config:
-        extra = Extra.forbid
+
 
 
 class CharityProjectDB(CharityProjectCreate):
